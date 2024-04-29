@@ -10,7 +10,7 @@ Based on [this page](https://www.geeksforgeeks.org/socket-programming-cc/).
 mkdir build
 cd build && cmake ../
 make
-./server 8000
+./server 8000 &
 ./client 8000
 
 ## requirements
