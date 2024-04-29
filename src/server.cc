@@ -1,6 +1,7 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 
 #include "./protocol.h"
+
 #include <thread>
 using std::thread;
 
@@ -18,19 +19,42 @@ struct sockaddr_in FillAddress(int port) {
   return address;
 }
 
+static bool SocketIsLive(int fd) {
+  int error = 0;
+  socklen_t len = sizeof(error);
+  const int val = getsockopt(fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+  if (val != 0) {
+    fprintf(stderr, "problem with socket %d: %s\n", fd, strerror(val));
+    return false;
+  }
+  if (error != 0) {
+    fprintf(stderr, "Error with socket %d: %s\n", fd, strerror(val));
+    return false;
+  }
+  return true;
+}
+
 int ListenToClient(int fd) {
   const uint32_t myself = std::hash<std::thread::id>{}(std::this_thread::get_id());
   fprintf(stderr, " => Thread #%u listening to socket %d\n", myself, fd);
+  uint32_t id = 0;  // TBD later
   bool finished = false;
-  while (!finished) {
+  while (!finished && SocketIsLive(fd)) {
     Message msg;
     if (msg.Read(fd)) {
-      printf("CMD: %s\n", msg.TypeName());
+      printf("CMD: %s, Id: %u\n", msg.TypeName(), id);
+      if (msg.Type() == CMD_ID) {
+        id = msg.ClientId();  // client's id is now known
+      } else if (msg.Type() == CMD_END) {
+        printf("Client %d ended.\n", id);
+        finished = true;
+      } else if (msg.Type() == CMD_DATA) {
+        printf("Client #%d send timer data: %u\n", id, *(uint32_t*)msg.Payload());
+      } else if (msg.Type() == CMD_GET) {
+        printf("Sending data to client #%u\n", id);
+        finished = !Message(CMD_DATA, id, "some data").Write(fd);
+      }
     }
-    if (msg.Type() == CMD_ID) {
-      printf("CMD_ID: %u\n", msg.ClientId());
-    }
-    finished = true;
   }
   close(fd);
   return 0;
@@ -54,7 +78,7 @@ int main(int argc, const char* argv[]) {
   struct sockaddr_in address = FillAddress(port);
   if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
     close(server_fd);
-    return Error("bind() failed");
+    return Error("bind() failed. Adress already in use??");
   }
   if (listen(server_fd, /*backlog=*/5) < 0) {
     close(server_fd);

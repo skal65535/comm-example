@@ -19,6 +19,8 @@ typedef enum {
   CMD_ID = 0,
   CMD_SET,
   CMD_GET,
+  CMD_DATA,
+  CMD_END,
 
   CMD_LAST,  // for safety checks
 } MessageType;
@@ -41,10 +43,15 @@ struct Message {
       memcpy(payload_.data(), data, len * sizeof(uint8_t)); 
     }
   }
+  Message(MessageType type, uint32_t client_id, std::string s)
+    : Message(type, client_id, s.size(), s.data()) {}
 
   MessageType Type() const { return type_; }
   const char* TypeName() const {
-    static const char* kTypeNames[] = { "CMD_ID", "CMD_SET", "CMD_GET", "CMD_LAST" };
+    static const char* kTypeNames[] = {
+      "CMD_ID", "CMD_SET", "CMD_GET", "CMD_DATA", "CMD_END",
+      "CMD_LAST",
+    };  // should be in some 'protocol.cc' file instead
     assert(type_ <= CMD_LAST);
     return kTypeNames[type_];
   }

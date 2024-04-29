@@ -10,8 +10,12 @@ Based on [this page](https://www.geeksforgeeks.org/socket-programming-cc/).
 mkdir build
 cd build && cmake ../
 make
+
+# example usage
+
 ./server 8000 &
-./client 8000
+./client 502 8000 &
+./client 2432 8000     // <- in another terminal, for instance
 
 ## requirements
 
