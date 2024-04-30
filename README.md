@@ -7,15 +7,15 @@ Based on [this page](https://www.geeksforgeeks.org/socket-programming-cc/).
 
 # building
 
- . mkdir build
- . cd build && cmake ../
- . make
+ * mkdir build
+ * cd build && cmake ../
+ * make
 
 # example usage
 
-. ./server 8000 &
-. ./client 502 8000 &
-. ./client 2432 8000     // <- in another terminal, for instance
+ * ./server 8000 &
+ * ./client 502 8000 &
+ * ./client 2432 8000     // <- in another terminal, for instance
 
 ## requirements
 
@@ -27,6 +27,6 @@ Based on [this page](https://www.geeksforgeeks.org/socket-programming-cc/).
 
 Use with:
 
- . cd rust
- . cargo run --bin server &
- . cargo run --bin client
+ * cd rust
+ * cargo run --bin server &
+ * cargo run --bin client
