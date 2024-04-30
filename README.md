@@ -27,7 +27,7 @@ make
 
 # Rust version
 
-  See TcpListener man page: https://doc.rust-lang.org/std/net/struct.TcpListener.html
+  See [TcpListener](https://doc.rust-lang.org/std/net/struct.TcpListener.html) man page.
 
 Use with:
 
