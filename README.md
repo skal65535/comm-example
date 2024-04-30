@@ -20,3 +20,12 @@ make
 ## requirements
 
   The library is in C++ and uses CMake (v 3.5+) as a build system.
+
+# Rust version
+
+  See TcpListener man page: https://doc.rust-lang.org/std/net/struct.TcpListener.html
+
+  Use with:
+   cd rust
+   cargo run --bin server &
+   cargo run --bin client
