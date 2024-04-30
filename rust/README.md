@@ -6,6 +6,6 @@ See [TcpListener](https://doc.rust-lang.org/std/net/struct.TcpListener.html) man
 
 Use with:
 
-  * cd rust
-  * cargo run --bin server &
-  * cargo run --bin client
+     cd rust
+     cargo run --bin server &
+     cargo run --bin client
