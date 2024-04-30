@@ -8,13 +8,17 @@ Based on [this page](https://www.geeksforgeeks.org/socket-programming-cc/).
 # building
 
 mkdir build
+
 cd build && cmake ../
+
 make
 
 # example usage
 
 ./server 8000 &
+
 ./client 502 8000 &
+
 ./client 2432 8000     // <- in another terminal, for instance
 
 ## requirements
@@ -25,7 +29,10 @@ make
 
   See TcpListener man page: https://doc.rust-lang.org/std/net/struct.TcpListener.html
 
-  Use with:
-   cd rust
-   cargo run --bin server &
-   cargo run --bin client
+Use with:
+
+cd rust
+
+cargo run --bin server &
+
+cargo run --bin client
